@@ -1,5 +1,6 @@
 # 🌌 Galaxy Store 自建域名规则
-# 仓库：styrigx/mihomo-rules/src/own/geosite/galaxy-store.yaml
+# 这里只是手写补充（原料）；合并公开来源后的成品在 release 分支同路径。
+# 仓库：styrigx/mihomo-rules/geosite/galaxy-store.yaml
 # 引用：rule-provider / type http / behavior domain / format yaml
 payload:
   - "+.galaxyappstore.com"  # Galaxy Store 客户端主域

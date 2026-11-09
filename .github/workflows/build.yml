@@ -1,6 +1,6 @@
 name: build
 
-# 拉取 → 合并 → 编译 → 自检 → 发布到 dist（单提交强推）。
+# 拉取 → 合并 → 编译 → 自检 → 发布到 release（单提交强推）。
 on:
   schedule:
     # 上游 MetaCubeX/meta-rules-dat 的 cron 是 22:30 UTC，实际发布常拖到 01:00–02:00 UTC 前后；
@@ -9,11 +9,15 @@ on:
   push:
     branches: [main]
     paths:
-      - "src/**"
+      - "geosite/**"
+      - "geoip/**"
+      - "sources.yaml"
       - "scripts/**"
   pull_request:
     paths:
-      - "src/**"
+      - "geosite/**"
+      - "geoip/**"
+      - "sources.yaml"
       - "scripts/**"
       - "tests/**"
       - "examples/**"
@@ -30,7 +34,7 @@ permissions:
   issues: write
 
 concurrency:
-  group: build-${{ github.event_name == 'pull_request' && github.ref || 'dist' }}
+  group: build-${{ github.event_name == 'pull_request' && github.ref || 'release' }}
   cancel-in-progress: false
 
 env:
@@ -72,14 +76,14 @@ jobs:
           d=$(mktemp -d); cp examples/config.yaml "$d/"
           "$RUNNER_TEMP/bin/mihomo" -t -d "$d" -f "$d/config.yaml"
 
-      - name: 取当前 dist（上次好的版本）
+      - name: 取当前 release（上次好的版本）
         run: |
           mkdir -p "$RUNNER_TEMP/prev"
-          if git fetch --depth=1 origin dist 2>/dev/null; then
+          if git fetch --depth=1 origin release 2>/dev/null; then
             git archive FETCH_HEAD | tar -x -C "$RUNNER_TEMP/prev"
-            echo "有上次的 dist：$(git rev-parse FETCH_HEAD)"
+            echo "有上次的 release：$(git rev-parse FETCH_HEAD)"
           else
-            echo "还没有 dist 分支（首次发布）"
+            echo "还没有 release 分支（首次发布）"
           fi
 
       - name: 拉取
@@ -95,43 +99,43 @@ jobs:
           # 2 = 自有规则写法错误：继续走完（其余规则集照常发布、开 issue），最后让 job 变红
           [ "$rc" = 0 ] || [ "$rc" = 2 ]
 
-      - name: 编译 + 自检 + 组装 dist
+      - name: 编译 + 自检 + 组装成品
         id: build
         run: |
           set +e
           FORCE=""
           if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.force }}" = "true" ]; then FORCE="--force"; fi
-          python scripts/build.py --mihomo "$RUNNER_TEMP/bin/mihomo" --out "$RUNNER_TEMP/dist" --prev "$RUNNER_TEMP/prev" $FORCE
+          python scripts/build.py --mihomo "$RUNNER_TEMP/bin/mihomo" --out "$RUNNER_TEMP/out" --prev "$RUNNER_TEMP/prev" $FORCE
           echo "rc=$?" >> "$GITHUB_OUTPUT"
           {
             echo "### 规则集"
             echo
             echo "| 规则集 | 状态 | 条目 | 公开来源里跳过 |"
             echo "|---|---|---|---|"
-            jq -r '.sets | to_entries[] | "| \(.key) | \(.value.state) | \(.value.count // "-") | \((.value.skipped // {}) | to_entries | map("\(.key) \(.value)") | join(", ")) |"' "$RUNNER_TEMP/dist/manifest.json"
+            jq -r '.sets | to_entries[] | "| \(.key) | \(.value.state) | \(.value.count // "-") | \((.value.skipped // {}) | to_entries | map("\(.key) \(.value)") | join(", ")) |"' "$RUNNER_TEMP/out/manifest.json"
           } >> "$GITHUB_STEP_SUMMARY"
           exit 0
 
-      - name: 发布到 dist（孤儿单提交，强推）
+      - name: 发布到 release（孤儿单提交，强推）
         if: github.event_name != 'pull_request' && steps.build.outputs.rc == '0'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          new=$(jq -r .content_hash "$RUNNER_TEMP/dist/manifest.json")
+          new=$(jq -r .content_hash "$RUNNER_TEMP/out/manifest.json")
           old=$(jq -r '.content_hash // empty' "$RUNNER_TEMP/prev/manifest.json" 2>/dev/null || true)
           if [ "$new" = "$old" ]; then
-            echo "内容与当前 dist 相同，不发布。"
+            echo "内容与当前 release 相同，不发布。"
             exit 0
           fi
-          up=$(jq -r ".upstream.metacubex.commit // \"-\"" "$RUNNER_TEMP/dist/manifest.json")
-          cd "$RUNNER_TEMP/dist"
-          git init -q -b dist
+          up=$(jq -r ".upstream.metacubex.commit // \"-\"" "$RUNNER_TEMP/out/manifest.json")
+          cd "$RUNNER_TEMP/out"
+          git init -q -b release
           git add -A
           git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
             commit -q -m "发布规则集 $(date -u +%Y-%m-%dT%H:%MZ)（main ${GITHUB_SHA::7}，上游 ${up::7}）"
           auth=$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)
           git -c http.https://github.com/.extraheader="AUTHORIZATION: basic $auth" \
-            push --force "https://github.com/${GITHUB_REPOSITORY}.git" dist:dist
+            push --force "https://github.com/${GITHUB_REPOSITORY}.git" release:release
           git ls-files | wc -l
 
       - name: 维护滚动 issue
@@ -147,5 +151,5 @@ jobs:
           fails=$(jq -r '[.sets[] | select(.ok | not) | .set] | join(", ")' build/status.json 2>/dev/null || echo "?")
           echo "失败的规则集：${fails:-无}"
           [ "${{ steps.merge.outputs.rc }}" = "0" ] || { echo "::error::自有规则有写法错误，见「合并」步骤"; exit 1; }
-          [ "${{ steps.build.outputs.rc }}" = "0" ] || { echo "::error::dist 终检没过，本次未发布"; exit 1; }
+          [ "${{ steps.build.outputs.rc }}" = "0" ] || { echo "::error::release 终检没过，本次未发布"; exit 1; }
           [ -z "$fails" ] || { echo "::error::以下规则集本次未更新（保留上次版本）：$fails"; exit 1; }
