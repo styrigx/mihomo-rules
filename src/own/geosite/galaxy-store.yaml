@@ -1,0 +1,9 @@
+# 🌌 Galaxy Store 自建域名规则
+# 仓库：styrigx/mihomo-rules/src/own/geosite/galaxy-store.yaml
+# 引用：rule-provider / type http / behavior domain / format yaml
+payload:
+  - "+.galaxyappstore.com"  # Galaxy Store 客户端主域
+  - "+.samsungapps.com"     # 应用商店 API、支付及应用下载 CDN
+  - "+.samsungdng.com"      # 数字分发网络组件
+  - "+.samsungatp.com"      # 商店应用测试与分发平台
+  - "+.samsungqbe.com"      # 商店业务埋点与元数据

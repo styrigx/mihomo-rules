@@ -1,0 +1,20 @@
+# 🌌 Samsung 自建域名规则
+# 仓库：styrigx/mihomo-rules/src/own/geosite/samsung.yaml
+# 引用：rule-provider / type http / behavior domain / format yaml
+# 说明：meta-rules-dat 的 samsung.mrs 覆盖不到的三星自有服务域，补在这里
+payload:
+  - "+.samsungpass.com"       # Samsung Pass 密码管家
+  - "+.samsunggsl.com"        # 三星底层寻址服务
+  - "+.gos-gsp.io"            # 游戏优化服务 (GOS)
+  - "+.samsungmobile.com"     # 基础设备支持域
+  - "+.secb2b.com"            # Knox/企业级证书锁定验证
+  - "+.samsungknowledge.com"  # 三星知识库与帮助文档
+  - "+.bixbyllm.com"          # Bixby 大模型服务
+  - "+.samqaicongen.com"      # 三星 AI 内容生成相关
+  - "+.knox-matrix.com"       # Knox 安全矩阵服务
+  - "+.samsungapis.com"       # 三星开放 API 网关
+  - "+.tizen.org"             # Tizen 物联网/穿戴系统
+  - "+.naturalcycles.com"     # 经期健康应用（与 Samsung Health 联动）
+  - "+.samsungmembers.com"    # Samsung Members 会员社区
+  - "+.samsung.net"           # 三星基础根域名
+  - "+.samsungdive.com"       # 查找设备旧版服务（Samsung Dive）

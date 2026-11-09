@@ -1,0 +1,33 @@
+# 规则集清单：机器人只拉这里列出的来源（不全网爬）。加来源、加规则集都走 PR 改这个文件。
+#
+# repos：上游仓库。每次构建先把分支解析成一个固定 commit，同一次构建的所有文件都按这个 commit 下载。
+#
+# sets：每个规则集
+#   name      基础名（小写、连字符），产出 dist/<kind>/<name>.{yaml,mrs}
+#   kind      geosite（behavior: domain）或 geoip（behavior: ipcidr）
+#   provider  配置里的 rule-provider 名（示例配置与 README 用）
+#   upstream  公开来源列表（可多个、可为空），每项：
+#     repo    上面 repos 里的名字（按固定 commit 拉）；或者改写 url: 直接给完整地址（不固定 commit）
+#     path    仓库内路径（.yaml = payload: 列表；.list / .txt = 每行一条）
+#     format  payload   —— MetaCubeX 那种明文：domain 规则集是 域名 / +.域名，ipcidr 规则集是网段
+#             classical —— Clash classical 写法（DOMAIN-SUFFIX,x / DOMAIN,x / IP-CIDR,x …，如 blackmatrix7/ios_rule_script）
+#   公开来源里编不进 MRS 的行（DOMAIN-KEYWORD、DOMAIN-REGEX、PROCESS-NAME、geosite 里的 IP 行等）跳过并计数，
+#   写进 dist/manifest.json 的 skipped；不报错。
+# 自有规则：src/own/<kind>/<name>.yaml 存在就自动并入，无需在这里登记；自有规则写错是硬错误。
+repos:
+  metacubex: { repo: MetaCubeX/meta-rules-dat, branch: meta }
+
+sets:
+  - { name: overseas,     kind: geosite, provider: Overseas_mrs,     upstream: [{ repo: metacubex, path: "geo/geosite/geolocation-!cn.yaml", format: payload }] }
+  - { name: cn,           kind: geosite, provider: CN_mrs,           upstream: [{ repo: metacubex, path: "geo/geosite/cn.yaml", format: payload }] }
+  - { name: cn,           kind: geoip,   provider: IP_CN_mrs,        upstream: [{ repo: metacubex, path: "geo/geoip/cn.yaml", format: payload }] }
+  - { name: ai,           kind: geosite, provider: AI_mrs,           upstream: [{ repo: metacubex, path: "geo/geosite/category-ai-!cn.yaml", format: payload }] }
+  - { name: google,       kind: geosite, provider: Google_mrs,       upstream: [{ repo: metacubex, path: "geo/geosite/google.yaml", format: payload }] }
+  - { name: google,       kind: geoip,   provider: IP_Google_mrs,    upstream: [{ repo: metacubex, path: "geo/geoip/google.yaml", format: payload }] }
+  - { name: samsung,      kind: geosite, provider: Samsung_mrs,      upstream: [{ repo: metacubex, path: "geo/geosite/samsung.yaml", format: payload }] }
+  - { name: galaxy-store, kind: geosite, provider: Galaxy_Store_mrs, upstream: [] }
+  - { name: nintendo,     kind: geosite, provider: Nintendo_mrs,     upstream: [{ repo: metacubex, path: "geo/geosite/nintendo.yaml", format: payload }] }
+  - { name: private,      kind: geosite, provider: Private_mrs,      upstream: [{ repo: metacubex, path: "geo/geosite/private.yaml", format: payload }] }
+  - { name: private,      kind: geoip,   provider: IP_Private_mrs,   upstream: [{ repo: metacubex, path: "geo/geoip/private.yaml", format: payload }] }
+  - { name: ntp,          kind: geosite, provider: NTP_mrs,          upstream: [{ repo: metacubex, path: "geo/geosite/category-ntp.yaml", format: payload }] }
+  - { name: ads,          kind: geosite, provider: Ads_mrs,          upstream: [{ repo: metacubex, path: "geo/geosite/category-ads-all.yaml", format: payload }] }
