@@ -1,8 +1,6 @@
 # styrigx/mihomo-rules 示例配置（只含规则部分：rule-providers / proxy-groups / rules）。
 # 用法：把 rule-providers 和 rules 抄进自己的配置；proxy-groups 里的 DIRECT 换成自己的节点/订阅。
-# url 指向 proxy-rules.styrigx.com 中转（路径 = /<仓库>/<分支>/<文件>，镜像 GitHub raw 的布局）；
-#   中转白名单放行本仓 dist 路径之前，可以先用 GitHub raw：
-#   https://raw.githubusercontent.com/styrigx/mihomo-rules/dist/geosite/samsung.mrs
+# url 用 GitHub raw（dist 分支），可以换成自己的中转。
 # 规则顺序写死：LAN/广告先处理，然后 Galaxy Store → Samsung → AI → Google → … → Overseas → CN。
 #   Galaxy Store 的域名有几条也在 samsung 里（如 +.samsungapps.com），靠顺序让它先进 Galaxy Store 组。
 
@@ -14,55 +12,55 @@ rule-providers:
   Overseas_mrs:
     <<: *domain
     path: ./rules/geosite/overseas.mrs
-    url: "https://proxy-rules.styrigx.com/styrigx/mihomo-rules/dist/geosite/overseas.mrs"
+    url: "https://raw.githubusercontent.com/styrigx/mihomo-rules/dist/geosite/overseas.mrs"
   CN_mrs:
     <<: *domain
     path: ./rules/geosite/cn.mrs
-    url: "https://proxy-rules.styrigx.com/styrigx/mihomo-rules/dist/geosite/cn.mrs"
+    url: "https://raw.githubusercontent.com/styrigx/mihomo-rules/dist/geosite/cn.mrs"
   IP_CN_mrs:
     <<: *ipcidr
     path: ./rules/geoip/cn.mrs
-    url: "https://proxy-rules.styrigx.com/styrigx/mihomo-rules/dist/geoip/cn.mrs"
+    url: "https://raw.githubusercontent.com/styrigx/mihomo-rules/dist/geoip/cn.mrs"
   AI_mrs:
     <<: *domain
     path: ./rules/geosite/ai.mrs
-    url: "https://proxy-rules.styrigx.com/styrigx/mihomo-rules/dist/geosite/ai.mrs"
+    url: "https://raw.githubusercontent.com/styrigx/mihomo-rules/dist/geosite/ai.mrs"
   Google_mrs:
     <<: *domain
     path: ./rules/geosite/google.mrs
-    url: "https://proxy-rules.styrigx.com/styrigx/mihomo-rules/dist/geosite/google.mrs"
+    url: "https://raw.githubusercontent.com/styrigx/mihomo-rules/dist/geosite/google.mrs"
   IP_Google_mrs:
     <<: *ipcidr
     path: ./rules/geoip/google.mrs
-    url: "https://proxy-rules.styrigx.com/styrigx/mihomo-rules/dist/geoip/google.mrs"
+    url: "https://raw.githubusercontent.com/styrigx/mihomo-rules/dist/geoip/google.mrs"
   Samsung_mrs:
     <<: *domain
     path: ./rules/geosite/samsung.mrs
-    url: "https://proxy-rules.styrigx.com/styrigx/mihomo-rules/dist/geosite/samsung.mrs"
+    url: "https://raw.githubusercontent.com/styrigx/mihomo-rules/dist/geosite/samsung.mrs"
   Galaxy_Store_mrs:
     <<: *domain
     path: ./rules/geosite/galaxy-store.mrs
-    url: "https://proxy-rules.styrigx.com/styrigx/mihomo-rules/dist/geosite/galaxy-store.mrs"
+    url: "https://raw.githubusercontent.com/styrigx/mihomo-rules/dist/geosite/galaxy-store.mrs"
   Nintendo_mrs:
     <<: *domain
     path: ./rules/geosite/nintendo.mrs
-    url: "https://proxy-rules.styrigx.com/styrigx/mihomo-rules/dist/geosite/nintendo.mrs"
+    url: "https://raw.githubusercontent.com/styrigx/mihomo-rules/dist/geosite/nintendo.mrs"
   Private_mrs:
     <<: *domain
     path: ./rules/geosite/private.mrs
-    url: "https://proxy-rules.styrigx.com/styrigx/mihomo-rules/dist/geosite/private.mrs"
+    url: "https://raw.githubusercontent.com/styrigx/mihomo-rules/dist/geosite/private.mrs"
   IP_Private_mrs:
     <<: *ipcidr
     path: ./rules/geoip/private.mrs
-    url: "https://proxy-rules.styrigx.com/styrigx/mihomo-rules/dist/geoip/private.mrs"
+    url: "https://raw.githubusercontent.com/styrigx/mihomo-rules/dist/geoip/private.mrs"
   NTP_mrs:
     <<: *domain
     path: ./rules/geosite/ntp.mrs
-    url: "https://proxy-rules.styrigx.com/styrigx/mihomo-rules/dist/geosite/ntp.mrs"
+    url: "https://raw.githubusercontent.com/styrigx/mihomo-rules/dist/geosite/ntp.mrs"
   Ads_mrs:
     <<: *domain
     path: ./rules/geosite/ads.mrs
-    url: "https://proxy-rules.styrigx.com/styrigx/mihomo-rules/dist/geosite/ads.mrs"
+    url: "https://raw.githubusercontent.com/styrigx/mihomo-rules/dist/geosite/ads.mrs"
 
 proxy-groups:
   - {name: Galaxy Store, type: select, proxies: [DIRECT]}  # 换成自己的节点

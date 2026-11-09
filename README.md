@@ -44,7 +44,7 @@ rule-providers:
     interval: 86400
     proxy: DIRECT
     path: ./rules/geosite/samsung.mrs
-    url: "https://proxy-rules.styrigx.com/styrigx/mihomo-rules/dist/geosite/samsung.mrs"
+    url: "https://raw.githubusercontent.com/styrigx/mihomo-rules/dist/geosite/samsung.mrs"
   IP_CN_mrs:
     type: http
     behavior: ipcidr
@@ -52,15 +52,14 @@ rule-providers:
     interval: 86400
     proxy: DIRECT
     path: ./rules/geoip/cn.mrs
-    url: "https://proxy-rules.styrigx.com/styrigx/mihomo-rules/dist/geoip/cn.mrs"
+    url: "https://raw.githubusercontent.com/styrigx/mihomo-rules/dist/geoip/cn.mrs"
 ```
 
 完整示例（13 个 rule-provider + 写死的规则顺序）见 [`examples/config.yaml`](examples/config.yaml)。规则顺序：局域网 / 广告先处理，然后 **Galaxy Store → Samsung → AI → Google → … → Overseas → CN**。Galaxy Store 有几条域名也在 samsung 里（如 `+.samsungapps.com`），靠顺序让它先进 Galaxy Store 组。
 
 地址说明：
 
-- `proxy-rules.styrigx.com` 是现有的 styrigx-proxy-rules 中转 Worker，路径 = `/<仓库>/<分支>/<文件>`（和 GitHub raw 布局一致）。**让 Worker 白名单放行本仓 dist 路径是另一个 PR（在 styrigx/styrigx-space），不在本仓。** 放行之前上面的地址会 404。
-- 直连 GitHub：`https://raw.githubusercontent.com/styrigx/mihomo-rules/dist/geosite/samsung.mrs`（优先用 raw，jsDelivr 的分支缓存会滞后）。
+- 用 GitHub raw：`https://raw.githubusercontent.com/styrigx/mihomo-rules/dist/geosite/samsung.mrs`（优先用 raw，jsDelivr 的分支缓存会滞后），也可以换成自己的中转。
 
 ### 仓库结构
 
@@ -118,7 +117,7 @@ Rule sets for [Mihomo](https://github.com/MetaCubeX/mihomo). A daily GitHub Acti
 
 **Sets** — see the table above: 10 domain sets under `geosite/` and 3 ipcidr sets under `geoip/`. Rule-provider names: `<Category>_mrs` for domains, `IP_<Category>_mrs` for IPs. `manifest.json` on `dist` records counts, upstream commits and skipped lines.
 
-**Usage** — `type: http`, `format: mrs`, `interval: 86400`, `proxy: DIRECT`, url `https://proxy-rules.styrigx.com/styrigx/mihomo-rules/dist/<geosite|geoip>/<name>.mrs` (the existing styrigx-proxy-rules Worker; whitelisting this repo's dist path is a separate PR in styrigx/styrigx-space and those URLs 404 until it lands) or directly `https://raw.githubusercontent.com/styrigx/mihomo-rules/dist/<geosite|geoip>/<name>.mrs`. A full example with the fixed rule order (LAN / ads first, then Galaxy Store → Samsung → AI → Google → … → Overseas → CN) is in [`examples/config.yaml`](examples/config.yaml).
+**Usage** — `type: http`, `format: mrs`, `interval: 86400`, `proxy: DIRECT`, url `https://raw.githubusercontent.com/styrigx/mihomo-rules/dist/<geosite|geoip>/<name>.mrs` (or your own mirror). A full example with the fixed rule order (LAN / ads first, then Galaxy Store → Samsung → AI → Google → … → Overseas → CN) is in [`examples/config.yaml`](examples/config.yaml).
 
 **Editing** — own rules live in `src/own/<geosite|geoip>/<set>.yaml` (`+.example.com` / `example.com`; classical `DOMAIN-SUFFIX`/`DOMAIN` are converted; `DOMAIN-KEYWORD` and regex are a hard error). Sources live in `src/sources.yaml`; a set may have several upstream sources, each with `format: payload` (MetaCubeX plain text) or `format: classical` (Clash classical, e.g. blackmatrix7/ios_rule_script). Upstream lines that cannot go into MRS are skipped and counted in the manifest, not treated as errors. Changes go through pull requests.
 
