@@ -11,7 +11,7 @@ from pathlib import Path
 import yaml
 
 ROOT = Path(__file__).resolve().parent.parent
-SRC = ROOT / "src"
+SRC = ROOT  # 原料都在仓库根目录：geosite/、geoip/、sources.yaml
 BUILD = Path(os.environ.get("BUILD_DIR", ROOT / "build"))
 
 KIND_BEHAVIOR = {"geosite": "domain", "geoip": "ipcidr"}
@@ -60,7 +60,7 @@ def set_id(s: dict) -> str:
 
 
 def own_file(s: dict) -> Path:
-    return SRC / "own" / s["kind"] / f"{s['name']}.yaml"
+    return SRC / s["kind"] / f"{s['name']}.yaml"
 
 
 # ---------- 读取 ----------

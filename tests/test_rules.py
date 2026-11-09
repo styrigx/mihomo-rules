@@ -77,7 +77,7 @@ class Repo(unittest.TestCase):
         self.assertIn(("geosite", "galaxy-store"), names)
 
     def test_own_counts(self):
-        root = Path(__file__).resolve().parent.parent / "src" / "own" / "geosite"
+        root = Path(__file__).resolve().parent.parent / "geosite"
         self.assertEqual(len(read_payload(root / "samsung.yaml")), 15)
         self.assertEqual(len(read_payload(root / "galaxy-store.yaml")), 5)
 

@@ -1,5 +1,6 @@
 # 🌌 Samsung 自建域名规则
-# 仓库：styrigx/mihomo-rules/src/own/geosite/samsung.yaml
+# 这里只是手写补充（原料）；合并公开来源后的成品在 release 分支同路径。
+# 仓库：styrigx/mihomo-rules/geosite/samsung.yaml
 # 引用：rule-provider / type http / behavior domain / format yaml
 # 说明：meta-rules-dat 的 samsung.mrs 覆盖不到的三星自有服务域，补在这里
 payload:

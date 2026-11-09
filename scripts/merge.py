@@ -4,7 +4,7 @@
 - 公开来源 format: payload（MetaCubeX 明文）或 classical（DOMAIN-SUFFIX,x 这类 Clash classical 写法）。
   DOMAIN / DOMAIN-SUFFIX、IP-CIDR / IP-CIDR6 自动转；编不进 MRS 的行（DOMAIN-KEYWORD、DOMAIN-REGEX、
   PROCESS-NAME、不合法的行等）跳过并按类型计数（merge.json / manifest 的 skipped），不报错。
-- 自有规则（src/own/**）：classical 的 DOMAIN / DOMAIN-SUFFIX 也自动转；DOMAIN-KEYWORD、正则等是硬错误
+- 自有规则（geosite/**、geoip/**）：classical 的 DOMAIN / DOMAIN-SUFFIX 也自动转；DOMAIN-KEYWORD、正则等是硬错误
   （整个命令退出码 2，改自有规则的 PR 会直接红），不静默丢掉。
 - 去重：完全相同的去掉；被某个 `+.父域` 覆盖的条目去掉（有 +.samsung.com 就不要 a.samsung.com）；
   ipcidr 规范成网段写法，被更大网段覆盖的去掉。
@@ -75,7 +75,7 @@ def main() -> int:
             skip_line = "，".join(f"{k} {v}" for k, v in sorted(skipped_all.items())) or "无"
             header = [
                 f"{sid}  (behavior: {'domain' if s['kind'] == 'geosite' else 'ipcidr'})",
-                "由 styrigx/mihomo-rules 机器人生成，勿手改；改规则请到 main 分支 src/。",
+                "由 styrigx/mihomo-rules 机器人生成，勿手改；改规则请到 main 分支 geosite/ 或 geoip/。",
                 f"公开来源: {src_line}",
                 f"自有规则: {r['own'] or '无'}",
                 f"条目: {len(merged)}（公开 {len(up_set)} + 自有 {len(own_set)}，重叠 {len(own_set & up_set)}，"

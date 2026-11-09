@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
-"""编译 + 发布前自检 + 组装 dist。
+"""编译 + 发布前自检 + 组装成品。
 
 用法：build.py --mihomo PATH --out DIR [--prev DIR] [--force]
 
 对每个规则集：
   1. 合并成功（merge.json）
   2. `mihomo convert-ruleset <domain|ipcidr> yaml in.yaml out.mrs` 编译成功
-  3. 条目数比上次 dist 骤降不超过 30%（--force 跳过这一项）
+  3. 条目数比上次 release 骤降不超过 30%（--force 跳过这一项）
   4. 真正加载：起一个只监听 127.0.0.1 的 mihomo（file 类型 rule-provider 引用全部 .mrs），
      从 /providers/rules 读每个规则集加载到的条数，必须 > 0 且与 YAML 条数一致
-任一项失败：该规则集用 --prev（当前 dist）里的上次好版本；没有上次版本就缺这一份。
-最后对组装好的 dist 整体再跑一遍 `mihomo -t` + 加载检查，不过就不发布（退出码 3）。
+任一项失败：该规则集用 --prev（当前 release 分支）里的上次好版本；没有上次版本就缺这一份。
+最后对组装好的成品 整体再跑一遍 `mihomo -t` + 加载检查，不过就不发布（退出码 3）。
 
 产出：--out 目录（geosite/、geoip/、manifest.json）和 build/status.json（给 issues.py 用）。
 """
@@ -69,7 +69,7 @@ def test_config(sets: list[dict], root: Path, port: int | None) -> str:
 
 
 def _env(root: Path) -> dict:
-    # mihomo 只允许读 home（-d）下的文件；规则集在别的目录，用 SAFE_PATHS 放行（只读，不往 dist 里写缓存）
+    # mihomo 只允许读 home（-d）下的文件；规则集在别的目录，用 SAFE_PATHS 放行（只读，不往成品里写缓存）
     return {**os.environ, "SAFE_PATHS": str(root.resolve())}
 
 
@@ -210,7 +210,7 @@ def main() -> int:
                     if not ok1:
                         status[set_id(s)].update(ok=False, error="mihomo -t 失败：" + out1[-1500:])
 
-    # 组装 dist
+    # 组装成品
     out = a.out
     shutil.rmtree(out, ignore_errors=True)
     out.mkdir(parents=True)
@@ -249,7 +249,7 @@ def main() -> int:
         manifest_sets[sid] = entry
         log(f"  {st['state']:7} {sid}: {entry.get('count', '-')}" + (f"  ← {st['error'].splitlines()[0]}" if st.get("error") else ""))
 
-    # 整体终检：组装好的 dist 必须能被 mihomo 加载
+    # 整体终检：组装好的成品 必须能被 mihomo 加载
     final_ok = True
     if published:
         ok_t, out_t = mihomo_t(a.mihomo, published, out)

@@ -3,7 +3,7 @@
 
 - 失败：按标题找打开的 issue，有就追加评论，没有就新开。
 - 恢复（本次成功发布了新版本）：给打开的 issue 评论"已恢复"并关闭。
-- 整体终检没过（什么都没发布）：另有一个「dist 终检」issue，规则同上。
+- 整体终检没过（什么都没发布）：另有一个「release 终检」issue，规则同上。
 环境变量：GITHUB_TOKEN、GITHUB_REPOSITORY、可选 RUN_URL。
 """
 from __future__ import annotations
@@ -19,7 +19,7 @@ from common import BUILD, log
 
 API = "https://api.github.com"
 TITLE = "规则集构建失败：{}"
-DIST_KEY = "dist 终检"
+DIST_KEY = "release 终检"
 
 
 def gh(method: str, path: str, body: dict | None = None):
@@ -81,13 +81,13 @@ def main() -> int:
             if st["ok"] and status["final_ok"]:
                 recover(sid)
             elif not st["ok"]:
-                kept = {"stale": "dist 里保留了上次好的版本。",
-                        "missing": "dist 里没有这个规则集的旧版本，本次缺这一份。"}.get(st.get("state"), "")
+                kept = {"stale": "release 里保留了上次好的版本。",
+                        "missing": "release 里没有这个规则集的旧版本，本次缺这一份。"}.get(st.get("state"), "")
                 fail(sid, f"规则集 `{sid}`（{st['provider']}）本次没有发布新版本。{kept}\n\n```\n{st.get('error', '')[:3000]}\n```")
         if status["final_ok"]:
             recover(DIST_KEY)
         else:
-            fail(DIST_KEY, "组装好的 dist 没通过终检（mihomo -t / 加载检查），本次没有发布，dist 分支保持不变。详见运行日志。")
+            fail(DIST_KEY, "组装好的成品 没通过终检（mihomo -t / 加载检查），本次没有发布，release 分支保持不变。详见运行日志。")
     except urllib.error.HTTPError as e:
         log(f"GitHub API 出错：{e.code} {e.read()[:500]!r}")
         rc = 1

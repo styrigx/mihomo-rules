@@ -3,7 +3,7 @@
 # repos：上游仓库。每次构建先把分支解析成一个固定 commit，同一次构建的所有文件都按这个 commit 下载。
 #
 # sets：每个规则集
-#   name      基础名（小写、连字符），产出 dist/<kind>/<name>.{yaml,mrs}
+#   name      基础名（小写、连字符），产出 release 分支 <kind>/<name>.{yaml,mrs}
 #   kind      geosite（behavior: domain）或 geoip（behavior: ipcidr）
 #   provider  配置里的 rule-provider 名（示例配置与 README 用）
 #   upstream  公开来源列表（可多个、可为空），每项：
@@ -12,8 +12,8 @@
 #     format  payload   —— MetaCubeX 那种明文：domain 规则集是 域名 / +.域名，ipcidr 规则集是网段
 #             classical —— Clash classical 写法（DOMAIN-SUFFIX,x / DOMAIN,x / IP-CIDR,x …，如 blackmatrix7/ios_rule_script）
 #   公开来源里编不进 MRS 的行（DOMAIN-KEYWORD、DOMAIN-REGEX、PROCESS-NAME、geosite 里的 IP 行等）跳过并计数，
-#   写进 dist/manifest.json 的 skipped；不报错。
-# 自有规则：src/own/<kind>/<name>.yaml 存在就自动并入，无需在这里登记；自有规则写错是硬错误。
+#   写进 release 分支 manifest.json 的 skipped；不报错。
+# 自有规则：<kind>/<name>.yaml（仓库根目录） 存在就自动并入，无需在这里登记；自有规则写错是硬错误。
 repos:
   metacubex: { repo: MetaCubeX/meta-rules-dat, branch: meta }
 
