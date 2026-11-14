@@ -1,0 +1,12 @@
+# geosite/galaxy-store  (behavior: domain)
+# 由 styrigx/mihomo-rules 机器人生成，勿手改；改规则请到 main 分支 geosite/ 或 geoip/。
+# 公开来源: 无
+# 自有规则: geosite/galaxy-store.yaml
+# 条目: 5（公开 0 + 自有 5，重叠 0，被父域/大网段覆盖去掉 0）
+# 公开来源里跳过（编不进 MRS）: 无
+payload:
+  - '+.galaxyappstore.com'
+  - '+.samsungapps.com'
+  - '+.samsungatp.com'
+  - '+.samsungdng.com'
+  - '+.samsungqbe.com'

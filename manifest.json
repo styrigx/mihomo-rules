@@ -1,0 +1,312 @@
+{
+  "generated_at": "2026-11-14T10:34:45Z",
+  "source": {
+    "repo": "styrigx/mihomo-rules",
+    "commit": "08a96d0bd36ec0a6167a3f8d71073f0f3d831c6a"
+  },
+  "upstream": {
+    "metacubex": {
+      "repo": "MetaCubeX/meta-rules-dat",
+      "branch": "meta",
+      "commit": "1127bb69cd31beba3d8fd851a9dba92e66eead42"
+    }
+  },
+  "mihomo": "Mihomo Meta v1.19.33 linux amd64 with go1.26.10 Wed Oct 21 16:39:55 UTC 2026",
+  "forced": false,
+  "content_hash": "1cb03f7f2ef2b2d51480deda597053ab6ab1e213605fb9459a41120be4a97603",
+  "sets": {
+    "geosite/overseas": {
+      "count": 26633,
+      "upstream_count": 27308,
+      "own_count": 0,
+      "own_already_upstream": 0,
+      "dropped_covered": 675,
+      "skipped": {},
+      "sources": [
+        {
+          "source": "MetaCubeX/meta-rules-dat@1127bb69cd31:geo/geosite/geolocation-!cn.yaml",
+          "format": "payload",
+          "count": 27308
+        }
+      ],
+      "own": null,
+      "state": "fresh",
+      "provider": "Overseas_mrs",
+      "behavior": "domain",
+      "sha256": {
+        "overseas.yaml": "103305dcf52fa39a658cc90b3de333a7170c20733baad5b46a8911ee1b43fd02",
+        "overseas.mrs": "36c7e6c6521acc5a203f47622f3040c8614920ffabe8f5821d56db45fd8efcbd"
+      }
+    },
+    "geosite/cn": {
+      "count": 110177,
+      "upstream_count": 110177,
+      "own_count": 0,
+      "own_already_upstream": 0,
+      "dropped_covered": 0,
+      "skipped": {},
+      "sources": [
+        {
+          "source": "MetaCubeX/meta-rules-dat@1127bb69cd31:geo/geosite/cn.yaml",
+          "format": "payload",
+          "count": 110177
+        }
+      ],
+      "own": null,
+      "state": "fresh",
+      "provider": "CN_mrs",
+      "behavior": "domain",
+      "sha256": {
+        "cn.yaml": "aa884ee111c1a69c24336a99dfd1a5e4ddf7e2b49bd13b2c8df3e9b9d4328bd6",
+        "cn.mrs": "0b8c7c4d9773471991dd65737fdb16f3bf1baf2512c8b764d4c235318f01b7c6"
+      }
+    },
+    "geoip/cn": {
+      "count": 9640,
+      "upstream_count": 9640,
+      "own_count": 0,
+      "own_already_upstream": 0,
+      "dropped_covered": 0,
+      "skipped": {},
+      "sources": [
+        {
+          "source": "MetaCubeX/meta-rules-dat@1127bb69cd31:geo/geoip/cn.yaml",
+          "format": "payload",
+          "count": 9640
+        }
+      ],
+      "own": null,
+      "state": "fresh",
+      "provider": "IP_CN_mrs",
+      "behavior": "ipcidr",
+      "sha256": {
+        "cn.yaml": "2c02e533be3d124c3df1d4b07ec295c93aa1d0b9bd6f6335a3a6069d87960cfc",
+        "cn.mrs": "81c8ab36f71f8a8f1440acdd6316730f8735e3aab26da7bde8de9faaf309463c"
+      }
+    },
+    "geosite/ai": {
+      "count": 217,
+      "upstream_count": 217,
+      "own_count": 0,
+      "own_already_upstream": 0,
+      "dropped_covered": 0,
+      "skipped": {},
+      "sources": [
+        {
+          "source": "MetaCubeX/meta-rules-dat@1127bb69cd31:geo/geosite/category-ai-!cn.yaml",
+          "format": "payload",
+          "count": 217
+        }
+      ],
+      "own": null,
+      "state": "fresh",
+      "provider": "AI_mrs",
+      "behavior": "domain",
+      "sha256": {
+        "ai.yaml": "2a3618a8859d02778d79d28181d62c66a61919065e4f98bc6f4946f0e3729ff3",
+        "ai.mrs": "252fc3e36adba99ccbe91b2c89eaf315a28e4872120239c665047d6057bf5775"
+      }
+    },
+    "geosite/google": {
+      "count": 847,
+      "upstream_count": 1078,
+      "own_count": 0,
+      "own_already_upstream": 0,
+      "dropped_covered": 231,
+      "skipped": {},
+      "sources": [
+        {
+          "source": "MetaCubeX/meta-rules-dat@1127bb69cd31:geo/geosite/google.yaml",
+          "format": "payload",
+          "count": 1078
+        }
+      ],
+      "own": null,
+      "state": "fresh",
+      "provider": "Google_mrs",
+      "behavior": "domain",
+      "sha256": {
+        "google.yaml": "2312e63f159cd62ab5ca99e9923d8ba61f41bcb17efd95ed86af75c799e208d2",
+        "google.mrs": "055189fdfa12a56941c9817a9da58bf1db967323d9d491004be9942265910206"
+      }
+    },
+    "geoip/google": {
+      "count": 7979,
+      "upstream_count": 7979,
+      "own_count": 0,
+      "own_already_upstream": 0,
+      "dropped_covered": 0,
+      "skipped": {},
+      "sources": [
+        {
+          "source": "MetaCubeX/meta-rules-dat@1127bb69cd31:geo/geoip/google.yaml",
+          "format": "payload",
+          "count": 7979
+        }
+      ],
+      "own": null,
+      "state": "fresh",
+      "provider": "IP_Google_mrs",
+      "behavior": "ipcidr",
+      "sha256": {
+        "google.yaml": "4161922d2686ed496f089168757711705d61693d18064ddac554b69f493e73dc",
+        "google.mrs": "9767a86d96c683bb2ec42947595616df3b6c2b54a3c2c2ca5ea75b4f47865ce3"
+      }
+    },
+    "geosite/samsung": {
+      "count": 42,
+      "upstream_count": 27,
+      "own_count": 15,
+      "own_already_upstream": 0,
+      "dropped_covered": 0,
+      "skipped": {},
+      "sources": [
+        {
+          "source": "MetaCubeX/meta-rules-dat@1127bb69cd31:geo/geosite/samsung.yaml",
+          "format": "payload",
+          "count": 27
+        }
+      ],
+      "own": "geosite/samsung.yaml",
+      "state": "fresh",
+      "provider": "Samsung_mrs",
+      "behavior": "domain",
+      "sha256": {
+        "samsung.yaml": "6ed35725beed6dc39e29c2b1f0cfe9ed76d0ba0fc9a0aa526b15e9cff593877e",
+        "samsung.mrs": "8dfb8171160c864858985881805505c435f0f7843d0365c925994eab612eb015"
+      }
+    },
+    "geosite/galaxy-store": {
+      "count": 5,
+      "upstream_count": 0,
+      "own_count": 5,
+      "own_already_upstream": 0,
+      "dropped_covered": 0,
+      "skipped": {},
+      "sources": [],
+      "own": "geosite/galaxy-store.yaml",
+      "state": "fresh",
+      "provider": "Galaxy_Store_mrs",
+      "behavior": "domain",
+      "sha256": {
+        "galaxy-store.yaml": "126964beb58a01207cd064fb3e911170e811c402058fd2616ca0802f31a3cef1",
+        "galaxy-store.mrs": "628ef6821029e64a24ec43b25ababc93ef75fbd072f99eac5a503a14883a6755"
+      }
+    },
+    "geosite/nintendo": {
+      "count": 124,
+      "upstream_count": 124,
+      "own_count": 0,
+      "own_already_upstream": 0,
+      "dropped_covered": 0,
+      "skipped": {},
+      "sources": [
+        {
+          "source": "MetaCubeX/meta-rules-dat@1127bb69cd31:geo/geosite/nintendo.yaml",
+          "format": "payload",
+          "count": 124
+        }
+      ],
+      "own": null,
+      "state": "fresh",
+      "provider": "Nintendo_mrs",
+      "behavior": "domain",
+      "sha256": {
+        "nintendo.yaml": "2363ca54dc9d79f20c97db926947e0908564630c021e399c7bb8cfb7d5f5d537",
+        "nintendo.mrs": "78cc64c14c73ec8ad06b0ad932bad620bf4d658dc136d6b7dd5f13069495efba"
+      }
+    },
+    "geosite/private": {
+      "count": 132,
+      "upstream_count": 132,
+      "own_count": 0,
+      "own_already_upstream": 0,
+      "dropped_covered": 0,
+      "skipped": {},
+      "sources": [
+        {
+          "source": "MetaCubeX/meta-rules-dat@1127bb69cd31:geo/geosite/private.yaml",
+          "format": "payload",
+          "count": 132
+        }
+      ],
+      "own": null,
+      "state": "fresh",
+      "provider": "Private_mrs",
+      "behavior": "domain",
+      "sha256": {
+        "private.yaml": "0a84c86f0d12d4f33381dea94940b1cbac2c7754890909cf4dce34b43a677c3d",
+        "private.mrs": "df452ab1bfb572f366f00001fa4525f16f137dc670aed2c60af0100dc397d3ec"
+      }
+    },
+    "geoip/private": {
+      "count": 28,
+      "upstream_count": 28,
+      "own_count": 0,
+      "own_already_upstream": 0,
+      "dropped_covered": 0,
+      "skipped": {},
+      "sources": [
+        {
+          "source": "MetaCubeX/meta-rules-dat@1127bb69cd31:geo/geoip/private.yaml",
+          "format": "payload",
+          "count": 28
+        }
+      ],
+      "own": null,
+      "state": "fresh",
+      "provider": "IP_Private_mrs",
+      "behavior": "ipcidr",
+      "sha256": {
+        "private.yaml": "401a65eb21d01d5babd192a1b4bc6ed8c3781de987f64f8a8080ee9e65cac000",
+        "private.mrs": "65027bee3076ec49024935c0eb9e4b85a447687db384d4b8d2763b6c2566ec1f"
+      }
+    },
+    "geosite/ntp": {
+      "count": 115,
+      "upstream_count": 116,
+      "own_count": 0,
+      "own_already_upstream": 0,
+      "dropped_covered": 1,
+      "skipped": {},
+      "sources": [
+        {
+          "source": "MetaCubeX/meta-rules-dat@1127bb69cd31:geo/geosite/category-ntp.yaml",
+          "format": "payload",
+          "count": 116
+        }
+      ],
+      "own": null,
+      "state": "fresh",
+      "provider": "NTP_mrs",
+      "behavior": "domain",
+      "sha256": {
+        "ntp.yaml": "89d0de72aa1498a80ad5574427467b5bf9bd85ec7cc9ab69d3565aaca3023095",
+        "ntp.mrs": "1518b635ea5d521f130985fea270cd679f41c55c04a6432fb9dbf7a6a241b4ec"
+      }
+    },
+    "geosite/ads": {
+      "count": 904,
+      "upstream_count": 908,
+      "own_count": 0,
+      "own_already_upstream": 0,
+      "dropped_covered": 4,
+      "skipped": {},
+      "sources": [
+        {
+          "source": "MetaCubeX/meta-rules-dat@1127bb69cd31:geo/geosite/category-ads-all.yaml",
+          "format": "payload",
+          "count": 908
+        }
+      ],
+      "own": null,
+      "state": "fresh",
+      "provider": "Ads_mrs",
+      "behavior": "domain",
+      "sha256": {
+        "ads.yaml": "2a24d20f3aec9f785d2254e5c9b109b75973727836fa1a28bf80d111f9974b2c",
+        "ads.mrs": "6875a60bc1bdab98bbaa9e4453d7039ec13c7d9df45e722664bf9b92bfbb42e7"
+      }
+    }
+  }
+}
