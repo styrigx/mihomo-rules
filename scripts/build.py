@@ -226,7 +226,7 @@ def main() -> int:
                 shutil.copy2(stage / s["kind"] / f, out / s["kind"] / f)
             st["state"] = "fresh"
             entry = {k: merge[sid][k] for k in ("count", "upstream_count", "own_count", "own_already_upstream",
-                                                 "dropped_covered", "skipped", "sources", "own")}
+                                                 "dropped_covered", "excluded", "skipped", "sources", "own")}
         elif a.prev and all((a.prev / s["kind"] / f).exists() for f in files):
             for f in files:
                 shutil.copy2(a.prev / s["kind"] / f, out / s["kind"] / f)
