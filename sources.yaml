@@ -13,6 +13,10 @@
 #             classical —— Clash classical 写法（DOMAIN-SUFFIX,x / DOMAIN,x / IP-CIDR,x …，如 blackmatrix7/ios_rule_script）
 #   公开来源里编不进 MRS 的行（DOMAIN-KEYWORD、DOMAIN-REGEX、PROCESS-NAME、geosite 里的 IP 行等）跳过并计数，
 #   写进 release 分支 manifest.json 的 skipped；不报错。
+#   exclude  可选的排除列表（只对 geosite 有效）：裸域名后缀，如 amazonaws.com；合并后去掉
+#     等于该后缀或属于它的子域的条目，`+.x` 与 `x` 写法都按裸域名算，去掉的条数记进
+#     manifest.json 的 excluded。注意：排除只能去掉单独列出的条目，`+.父域` 自身匹配到
+#     的子域去不掉（如 `+.amazon.com` 仍会匹配 aws.amazon.com，想排掉须让它在上游单独列出）。
 # 自有规则：<kind>/<name>.yaml（仓库根目录） 存在就自动并入，无需在这里登记；自有规则写错是硬错误。
 repos:
   metacubex: { repo: MetaCubeX/meta-rules-dat, branch: meta }
@@ -31,4 +35,88 @@ sets:
   - { name: private,      kind: geoip,   provider: IP_Private_mrs,   upstream: [{ repo: metacubex, path: "geo/geoip/private.yaml", format: payload }] }
   - { name: ntp,          kind: geosite, provider: NTP_mrs,          upstream: [{ repo: metacubex, path: "geo/geosite/category-ntp.yaml", format: payload }] }
   - { name: ads,          kind: geosite, provider: Ads_mrs,          upstream: [{ repo: metacubex, path: "geo/geosite/category-ads-all.yaml", format: payload }] }
-  - { name: amazon,       kind: geosite, provider: Amazon_mrs,       upstream: [] }
+  - name: amazon
+    kind: geosite
+    provider: Amazon_mrs
+    upstream:
+      - { repo: metacubex, path: "geo/geosite/amazon.yaml", format: payload }
+    # 排除：上游 amazon 分类自带的 AWS 相关及广告系统域（零售规则不要）
+    exclude:
+      - acmvalidations.com
+      - acmvalidationsaws.com
+      - aesworkshops.com
+      - amazon-adsystem.com
+      - amazonaws-china.com
+      - amazonaws.biz
+      - amazonaws.cn
+      - amazonaws.co.uk
+      - amazonaws.com
+      - amazonaws.com.cn
+      - amazonaws.info
+      - amazonaws.net
+      - amazonaws.org
+      - amazonaws.tv
+      - amazoncognito.com
+      - amazonlumberyard.wang
+      - amazonses.com
+      - amazonwebservices.cn
+      - amazonwebservices.com
+      - amazonwebservices.com.cn
+      - amazonworkdocs.cn
+      - amazonworkdocs.com
+      - amazonworkdocs.com.cn
+      - amplifyapp.com
+      - amplifyframework.com
+      - amzndns-cn.biz
+      - amzndns-cn.cn
+      - amzndns-cn.com
+      - amzndns-cn.net
+      - amzndns.co.uk
+      - amzndns.com
+      - amzndns.net
+      - amzndns.org
+      - asfiovnxocqpcry.com.cn
+      - aws
+      - aws-border.cn
+      - aws-icp-domain-manager.cn
+      - aws-iot-hackathon.com
+      - aws.com
+      - aws.dev
+      - awsapprunner.com
+      - awsapps.cn
+      - awsapps.com
+      - awsapps.com.cn
+      - awsautopilot.com
+      - awsautoscaling.com
+      - awsbraket.com
+      - awscommandlineinterface.com
+      - awsedstart.com
+      - awseducate.com
+      - awseducate.net
+      - awseducate.org
+      - awsglobalaccelerator.com
+      - awsloft-johannesburg.com
+      - awsloft-stockholm.com
+      - awssecworkshops.com
+      - awsstatic.cn
+      - awsstatic.com
+      - awsthinkbox.com
+      - awstrack.me
+      - awstrust.com
+      - awswaf.com
+      - cdkworkshop.com
+      - cloudfront-cn.net
+      - cloudfront-test.cn
+      - cloudfront.cn
+      - cloudfront.com
+      - cloudfront.net
+      - containersonaws.com
+      - elasticbeanstalk.com
+      - nwcdcloud.cn
+      - nwcdcloud.com.cn
+      - nwcddns.cn
+      - nwcdinfosec.cn
+      - route53.cn
+      - sagemaker.com.cn
+      - serving-sys.com
+      - thinkboxsoftware.com
