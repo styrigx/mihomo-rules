@@ -66,7 +66,7 @@ class Cidr(unittest.TestCase):
 class Repo(unittest.TestCase):
     def test_sources_and_own(self):
         cfg = load_sources()
-        self.assertEqual(len(cfg["sets"]), 13)
+        self.assertEqual(len(cfg["sets"]), 14)
         for s in cfg["sets"]:
             f = own_file(s)
             if f.exists():
@@ -80,6 +80,7 @@ class Repo(unittest.TestCase):
         root = Path(__file__).resolve().parent.parent / "geosite"
         self.assertEqual(len(read_payload(root / "samsung.yaml")), 15)
         self.assertEqual(len(read_payload(root / "galaxy-store.yaml")), 5)
+        self.assertEqual(len(read_payload(root / "amazon.yaml")), 157)
 
 
 if __name__ == "__main__":
