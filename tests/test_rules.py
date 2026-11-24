@@ -135,18 +135,22 @@ class Repo(unittest.TestCase):
         self.assertFalse(own_file(amz[0]).exists())
 
     def test_ai_upstreams_and_exclude(self):
-        # AI 集：category-ai-!cn + 18 个 per-AI-app 专用分类；素材市场整站排除
+        # AI 集：category-ai-!cn + 12 个 per-AI-app 专用分类；国产 AI 域名与素材市场整站排除
         cfg = load_sources()
         ai = [s for s in cfg["sets"] if (s["kind"], s["name"]) == ("geosite", "ai")]
         self.assertEqual(len(ai), 1)
         paths = sorted(u["path"] for u in ai[0]["upstream"])
         self.assertEqual(paths, sorted(
             "geo/geosite/" + n + ".yaml" for n in
-            ["category-ai-!cn", "anthropic", "aixcoder", "apple-intelligence", "bytedance-ai-!cn",
-             "cursor", "deepseek", "doubao", "github-copilot", "google-gemini", "huggingface",
-             "jetbrains-ai", "openai", "perplexity", "poe", "trae", "windsurf", "xai", "xiaomi-ai"]))
+            ["category-ai-!cn", "anthropic", "apple-intelligence", "cursor", "github-copilot",
+             "google-gemini", "huggingface", "jetbrains-ai", "openai", "perplexity", "poe",
+             "windsurf", "xai"]))
         self.assertEqual(ai[0].get("exclude"),
-                         ["envato-static.com", "envato.com", "envatousercontent.com", "themeforest.net"])
+                         ["cici.com", "ciciai.com", "ciciaicdn.com", "coze.com", "dify.ai",
+                          "dola.com", "envato-static.com", "envato.com", "envatousercontent.com",
+                          "kimi.ai", "manus.im", "manuscdn.com", "marscode.com", "minimax.io",
+                          "moonshot.ai", "qoder.com", "tapnow.ai", "themeforest.net", "trae.ai",
+                          "tripo3d.ai"])
 
     def test_google_nintendo_excludes(self):
         cfg = load_sources()
