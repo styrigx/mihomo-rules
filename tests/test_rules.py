@@ -1,10 +1,11 @@
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 
-from common import (RuleError, dedup_cidrs, dedup_domains, load_sources, norm_cidr,  # noqa: E402
+from common import (RuleError, apply_exclude, dedup_cidrs, dedup_domains, load_sources, norm_cidr,  # noqa: E402
                     norm_domain, own_file, parse_upstream, read_payload)
 
 
@@ -63,6 +64,51 @@ class Cidr(unittest.TestCase):
         self.assertEqual(covered, 2)
 
 
+class Exclude(unittest.TestCase):
+    def test_apply_exclude(self):
+        out, n = apply_exclude(
+            ["+.amazon.com", "+.amazonaws.com", "s3.amazonaws.com", "+.aws.com", "example.org"],
+            ["amazonaws.com", "aws.com"])
+        self.assertEqual(sorted(out), ["+.amazon.com", "example.org"])
+        self.assertEqual(n, 3)
+
+    def test_apply_exclude_label_boundary(self):
+        # 后缀匹配按标签边界算：fakeamazonaws.com 不是 amazonaws.com 的子域
+        out, n = apply_exclude(["+.fakeamazonaws.com", "+.x.amazonaws.com"], ["amazonaws.com"])
+        self.assertEqual(out, ["+.fakeamazonaws.com"])
+        self.assertEqual(n, 1)
+
+    def test_apply_exclude_plus_form(self):
+        # exclude 里 `+.x` 与 `x` 都按裸域名算
+        out, n = apply_exclude(["+.amazonaws.com", "+.amazon.com"], ["+.amazonaws.com"])
+        self.assertEqual(out, ["+.amazon.com"])
+        self.assertEqual(n, 1)
+
+    def test_load_sources_normalizes_exclude(self):
+        src = ("repos:\n"
+               "  metacubex: { repo: MetaCubeX/meta-rules-dat, branch: meta }\n"
+               "sets:\n"
+               "  - { name: amazon, kind: geosite, provider: Amazon_mrs,\n"
+               "      upstream: [{ repo: metacubex, path: \"geo/geosite/amazon.yaml\", format: payload }],\n"
+               "      exclude: [\"+.amazonaws.com\", \"aws.com\", \"amazonaws.com\"] }\n")
+        with tempfile.TemporaryDirectory() as d:
+            p = Path(d) / "sources.yaml"
+            p.write_text(src, encoding="utf-8")
+            cfg = load_sources(p)
+        amz = cfg["sets"][0]
+        self.assertEqual(amz["exclude"], ["amazonaws.com", "aws.com"])
+
+    def test_load_sources_exclude_geoip_rejected(self):
+        src = ("repos: {}\n"
+               "sets:\n"
+               "  - { name: cn, kind: geoip, provider: IP_CN_mrs, upstream: [], exclude: [\"amazonaws.com\"] }\n")
+        with tempfile.TemporaryDirectory() as d:
+            p = Path(d) / "sources.yaml"
+            p.write_text(src, encoding="utf-8")
+            with self.assertRaises(SystemExit):
+                load_sources(p)
+
+
 class Repo(unittest.TestCase):
     def test_sources_and_own(self):
         cfg = load_sources()
@@ -76,11 +122,22 @@ class Repo(unittest.TestCase):
         names = {(s["kind"], s["name"]) for s in cfg["sets"]}
         self.assertIn(("geosite", "galaxy-store"), names)
 
+    def test_amazon_uses_upstream_with_exclude(self):
+        # 亚马逊走官方上游 + exclude，不再把筛过的全量当自有规则留在仓库里
+        cfg = load_sources()
+        amz = [s for s in cfg["sets"] if (s["kind"], s["name"]) == ("geosite", "amazon")]
+        self.assertEqual(len(amz), 1)
+        ups = amz[0]["upstream"]
+        self.assertEqual(len(ups), 1)
+        self.assertEqual((ups[0]["repo"], ups[0]["path"], ups[0]["format"]),
+                         ("metacubex", "geo/geosite/amazon.yaml", "payload"))
+        self.assertEqual(len(amz[0].get("exclude") or []), 78)
+        self.assertFalse(own_file(amz[0]).exists())
+
     def test_own_counts(self):
         root = Path(__file__).resolve().parent.parent / "geosite"
         self.assertEqual(len(read_payload(root / "samsung.yaml")), 15)
         self.assertEqual(len(read_payload(root / "galaxy-store.yaml")), 5)
-        self.assertEqual(len(read_payload(root / "amazon.yaml")), 157)
 
 
 if __name__ == "__main__":
