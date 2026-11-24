@@ -134,6 +134,28 @@ class Repo(unittest.TestCase):
         self.assertEqual(len(amz[0].get("exclude") or []), 78)
         self.assertFalse(own_file(amz[0]).exists())
 
+    def test_ai_upstreams_and_exclude(self):
+        # AI 集：category-ai-!cn + 18 个 per-AI-app 专用分类；素材市场整站排除
+        cfg = load_sources()
+        ai = [s for s in cfg["sets"] if (s["kind"], s["name"]) == ("geosite", "ai")]
+        self.assertEqual(len(ai), 1)
+        paths = sorted(u["path"] for u in ai[0]["upstream"])
+        self.assertEqual(paths, sorted(
+            "geo/geosite/" + n + ".yaml" for n in
+            ["category-ai-!cn", "anthropic", "aixcoder", "apple-intelligence", "bytedance-ai-!cn",
+             "cursor", "deepseek", "doubao", "github-copilot", "google-gemini", "huggingface",
+             "jetbrains-ai", "openai", "perplexity", "poe", "trae", "windsurf", "xai", "xiaomi-ai"]))
+        self.assertEqual(ai[0].get("exclude"),
+                         ["envato-static.com", "envato.com", "envatousercontent.com", "themeforest.net"])
+
+    def test_google_nintendo_excludes(self):
+        cfg = load_sources()
+        by_id = {(s["kind"], s["name"]): s for s in cfg["sets"]}
+        self.assertEqual(by_id[("geosite", "google")].get("exclude"),
+                         ["oasisfeng.com", "txcloud.net"])
+        self.assertEqual(by_id[("geosite", "nintendo")].get("exclude"),
+                         ["dkr.com", "hackyourconsole.com", "nentindo.net"])
+
     def test_own_counts(self):
         root = Path(__file__).resolve().parent.parent / "geosite"
         self.assertEqual(len(read_payload(root / "samsung.yaml")), 15)
