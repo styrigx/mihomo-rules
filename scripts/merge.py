@@ -8,6 +8,9 @@
   （整个命令退出码 2，改自有规则的 PR 会直接红），不静默丢掉。
 - 去重：完全相同的去掉；被某个 `+.父域` 覆盖的条目去掉（有 +.samsung.com 就不要 a.samsung.com）；
   ipcidr 规范成网段写法，被更大网段覆盖的去掉。
+- exclude：某规则集在 sources.yaml 里可配 exclude 后缀列表，合并后去掉等于该后缀或属于
+  其子域的条目（`+.x` 与 `x` 都按裸域名算）；只能去掉单独列出的条目，`+.父域` 自身匹配
+  到的子域去不掉；去掉的条数记进 merge.json / manifest 的 excluded。
 - 公开来源拉取失败：只让用到它的规则集失败，build.py 保留上次好的版本。
 """
 from __future__ import annotations
@@ -16,8 +19,8 @@ import json
 import sys
 from pathlib import Path
 
-from common import (BUILD, ROOT, RuleError, dedup_cidrs, dedup_domains, load_sources, log, norm_cidr,
-                    norm_domain, own_file, parse_upstream, read_payload, set_id, write_payload)
+from common import (BUILD, ROOT, RuleError, apply_exclude, dedup_cidrs, dedup_domains, load_sources, log,
+                    norm_cidr, norm_domain, own_file, parse_upstream, read_payload, set_id, write_payload)
 
 
 def main() -> int:
@@ -61,6 +64,10 @@ def main() -> int:
             if not up and not own:
                 raise RuleError("规则集没有任何来源（upstream 为空且没有自有规则文件）")
             merged, covered = dedup(up + own)
+            excluded = 0
+            exc = s.get("exclude") or []
+            if exc:
+                merged, excluded = apply_exclude(merged, exc)
             up_set, own_set = set(up), set(own)
             r.update(
                 ok=True,
@@ -68,6 +75,7 @@ def main() -> int:
                 own_count=len(own_set),
                 own_already_upstream=len(own_set & up_set),
                 dropped_covered=covered,
+                excluded=excluded,
                 skipped=skipped_all,
                 count=len(merged),
             )
@@ -82,8 +90,10 @@ def main() -> int:
                 f"被父域/大网段覆盖去掉 {covered}）",
                 f"公开来源里跳过（编不进 MRS）: {skip_line}",
             ]
+            if exc:
+                header.append(f"排除: {excluded} 条（exclude 列表 {len(exc)} 条后缀）")
             write_payload(BUILD / "merged" / s["kind"] / f"{s['name']}.yaml", merged, header)
-            log(f"  ok  {sid}: {len(merged)}")
+            log(f"  ok  {sid}: {len(merged)}" + (f"（排除 {excluded}）" if exc else ""))
         except (RuleError, KeyError, OSError, ValueError) as e:
             r["error"] = str(e)
             log(f"  ERR {sid}: {e}")
