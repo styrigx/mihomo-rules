@@ -31,3 +31,4 @@ sets:
   - { name: private,      kind: geoip,   provider: IP_Private_mrs,   upstream: [{ repo: metacubex, path: "geo/geoip/private.yaml", format: payload }] }
   - { name: ntp,          kind: geosite, provider: NTP_mrs,          upstream: [{ repo: metacubex, path: "geo/geosite/category-ntp.yaml", format: payload }] }
   - { name: ads,          kind: geosite, provider: Ads_mrs,          upstream: [{ repo: metacubex, path: "geo/geosite/category-ads-all.yaml", format: payload }] }
+  - { name: amazon,       kind: geosite, provider: Amazon_mrs,       upstream: [] }
