@@ -31,12 +31,8 @@ sets:
     upstream:
       - { repo: metacubex, path: "geo/geosite/category-ai-!cn.yaml", format: payload }
       - { repo: metacubex, path: "geo/geosite/anthropic.yaml", format: payload }
-      - { repo: metacubex, path: "geo/geosite/aixcoder.yaml", format: payload }
       - { repo: metacubex, path: "geo/geosite/apple-intelligence.yaml", format: payload }
-      - { repo: metacubex, path: "geo/geosite/bytedance-ai-!cn.yaml", format: payload }
       - { repo: metacubex, path: "geo/geosite/cursor.yaml", format: payload }
-      - { repo: metacubex, path: "geo/geosite/deepseek.yaml", format: payload }
-      - { repo: metacubex, path: "geo/geosite/doubao.yaml", format: payload }
       - { repo: metacubex, path: "geo/geosite/github-copilot.yaml", format: payload }
       - { repo: metacubex, path: "geo/geosite/google-gemini.yaml", format: payload }
       - { repo: metacubex, path: "geo/geosite/huggingface.yaml", format: payload }
@@ -44,16 +40,30 @@ sets:
       - { repo: metacubex, path: "geo/geosite/openai.yaml", format: payload }
       - { repo: metacubex, path: "geo/geosite/perplexity.yaml", format: payload }
       - { repo: metacubex, path: "geo/geosite/poe.yaml", format: payload }
-      - { repo: metacubex, path: "geo/geosite/trae.yaml", format: payload }
       - { repo: metacubex, path: "geo/geosite/windsurf.yaml", format: payload }
       - { repo: metacubex, path: "geo/geosite/xai.yaml", format: payload }
-      - { repo: metacubex, path: "geo/geosite/xiaomi-ai.yaml", format: payload }
-    # 排除：上游 AI 分类里混进来的素材市场整站（不是 AI 应用）
+    # 排除：上游 AI 分类里混进来的国产 AI 应用域名（Gray 立规：拒用国产 AI）与素材市场整站
     exclude:
-      - envato.com
+      - cici.com
+      - ciciai.com
+      - ciciaicdn.com
+      - coze.com
+      - dify.ai
+      - dola.com
       - envato-static.com
+      - envato.com
       - envatousercontent.com
+      - kimi.ai
+      - manus.im
+      - manuscdn.com
+      - marscode.com
+      - minimax.io
+      - moonshot.ai
+      - qoder.com
+      - tapnow.ai
       - themeforest.net
+      - trae.ai
+      - tripo3d.ai
   - name: google
     kind: geosite
     provider: Google_mrs
