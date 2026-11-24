@@ -51,6 +51,19 @@ def load_sources(path: Path | None = None) -> dict:
             else:
                 raise SystemExit(f"sources.yaml: {set_id(s)} 的来源要么写 url，要么写 repos 里有的 repo + path：{u}")
         s["upstream"] = ups
+        exc = s.get("exclude")
+        if exc is not None:
+            if s["kind"] != "geosite":
+                raise SystemExit(f"sources.yaml: {set_id(s)} 的 exclude 只对 geosite 有效")
+            if not isinstance(exc, list) or not all(isinstance(x, str) and x.strip() for x in exc):
+                raise SystemExit(f"sources.yaml: {set_id(s)} 的 exclude 必须是裸域名列表")
+            normed = []
+            for x in exc:
+                try:
+                    normed.append(_base(norm_domain(x, f"{set_id(s)} exclude")))
+                except RuleError as e:
+                    raise SystemExit(f"sources.yaml: {set_id(s)} 的 exclude {x!r} 不合法：{e}") from e
+            s["exclude"] = sorted(dict.fromkeys(normed))
     data["repos"] = repos
     return data
 
@@ -130,6 +143,22 @@ def dedup_domains(entries: list[str]) -> tuple[list[str], int]:
         else:
             out.append(d)
     return sorted(out, key=lambda d: (list(reversed(_base(d).split("."))), d)), covered
+
+
+def apply_exclude(entries: list[str], exclude: list[str]) -> tuple[list[str], int]:
+    """按 exclude 后缀列表过滤 domain 条目：条目域名等于某条 exclude 或是它的子域就去掉。
+    exclude 里 `+.x` 与 `x` 两种写法都按裸域名算；匹配按标签边界算（fakeamazonaws.com
+    不是 amazonaws.com 的子域）。返回 (保留的条目, 去掉的条数)。"""
+    pats = sorted({_base(p.strip().strip("'\"").strip().lower().rstrip(".")) for p in exclude})
+    pats = [p for p in pats if p]
+    out, dropped = [], 0
+    for e in entries:
+        base = _base(e)
+        if any(base == p or base.endswith("." + p) for p in pats):
+            dropped += 1
+        else:
+            out.append(e)
+    return out, dropped
 
 
 # ---------- 规范化：ipcidr ----------
