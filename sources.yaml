@@ -25,12 +25,52 @@ sets:
   - { name: overseas,     kind: geosite, provider: Overseas_mrs,     upstream: [{ repo: metacubex, path: "geo/geosite/geolocation-!cn.yaml", format: payload }] }
   - { name: cn,           kind: geosite, provider: CN_mrs,           upstream: [{ repo: metacubex, path: "geo/geosite/cn.yaml", format: payload }] }
   - { name: cn,           kind: geoip,   provider: IP_CN_mrs,        upstream: [{ repo: metacubex, path: "geo/geoip/cn.yaml", format: payload }] }
-  - { name: ai,           kind: geosite, provider: AI_mrs,           upstream: [{ repo: metacubex, path: "geo/geosite/category-ai-!cn.yaml", format: payload }] }
-  - { name: google,       kind: geosite, provider: Google_mrs,       upstream: [{ repo: metacubex, path: "geo/geosite/google.yaml", format: payload }] }
+  - name: ai
+    kind: geosite
+    provider: AI_mrs
+    upstream:
+      - { repo: metacubex, path: "geo/geosite/category-ai-!cn.yaml", format: payload }
+      - { repo: metacubex, path: "geo/geosite/anthropic.yaml", format: payload }
+      - { repo: metacubex, path: "geo/geosite/aixcoder.yaml", format: payload }
+      - { repo: metacubex, path: "geo/geosite/apple-intelligence.yaml", format: payload }
+      - { repo: metacubex, path: "geo/geosite/bytedance-ai-!cn.yaml", format: payload }
+      - { repo: metacubex, path: "geo/geosite/cursor.yaml", format: payload }
+      - { repo: metacubex, path: "geo/geosite/deepseek.yaml", format: payload }
+      - { repo: metacubex, path: "geo/geosite/doubao.yaml", format: payload }
+      - { repo: metacubex, path: "geo/geosite/github-copilot.yaml", format: payload }
+      - { repo: metacubex, path: "geo/geosite/google-gemini.yaml", format: payload }
+      - { repo: metacubex, path: "geo/geosite/huggingface.yaml", format: payload }
+      - { repo: metacubex, path: "geo/geosite/jetbrains-ai.yaml", format: payload }
+      - { repo: metacubex, path: "geo/geosite/openai.yaml", format: payload }
+      - { repo: metacubex, path: "geo/geosite/perplexity.yaml", format: payload }
+      - { repo: metacubex, path: "geo/geosite/poe.yaml", format: payload }
+      - { repo: metacubex, path: "geo/geosite/trae.yaml", format: payload }
+      - { repo: metacubex, path: "geo/geosite/windsurf.yaml", format: payload }
+      - { repo: metacubex, path: "geo/geosite/xai.yaml", format: payload }
+      - { repo: metacubex, path: "geo/geosite/xiaomi-ai.yaml", format: payload }
+    # 排除：上游 AI 分类里混进来的素材市场整站（不是 AI 应用）
+    exclude:
+      - envato.com
+      - envato-static.com
+      - envatousercontent.com
+      - themeforest.net
+  - name: google
+    kind: geosite
+    provider: Google_mrs
+    upstream:
+      - { repo: metacubex, path: "geo/geosite/google.yaml", format: payload }
+    # 排除：非 Google 服务（个人博客子域、腾讯云整站）
+    exclude: [oasisfeng.com, txcloud.net]
   - { name: google,       kind: geoip,   provider: IP_Google_mrs,    upstream: [{ repo: metacubex, path: "geo/geoip/google.yaml", format: payload }] }
   - { name: samsung,      kind: geosite, provider: Samsung_mrs,      upstream: [{ repo: metacubex, path: "geo/geosite/samsung.yaml", format: payload }] }
   - { name: galaxy-store, kind: geosite, provider: Galaxy_Store_mrs, upstream: [] }
-  - { name: nintendo,     kind: geosite, provider: Nintendo_mrs,     upstream: [{ repo: metacubex, path: "geo/geosite/nintendo.yaml", format: payload }] }
+  - name: nintendo
+    kind: geosite
+    provider: Nintendo_mrs
+    upstream:
+      - { repo: metacubex, path: "geo/geosite/nintendo.yaml", format: payload }
+    # 排除：非任天堂自有服务（破解教程站、同人站、仿冒域名）
+    exclude: [dkr.com, hackyourconsole.com, nentindo.net]
   - { name: private,      kind: geosite, provider: Private_mrs,      upstream: [{ repo: metacubex, path: "geo/geosite/private.yaml", format: payload }] }
   - { name: private,      kind: geoip,   provider: IP_Private_mrs,   upstream: [{ repo: metacubex, path: "geo/geoip/private.yaml", format: payload }] }
   - { name: ntp,          kind: geosite, provider: NTP_mrs,          upstream: [{ repo: metacubex, path: "geo/geosite/category-ntp.yaml", format: payload }] }
