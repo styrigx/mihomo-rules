@@ -1,6 +1,6 @@
 # ☁️ Oracle Cloud 自建域名规则
 # 仓库：styrigx/mihomo-rules/geosite/oracle.yaml
-# 引用：rule-provider / behavior domain / format mrs（release 分支 geosite/oracle.mrs）
+# 引用：rule-provider 名 Oracle_mrs / behavior domain / format mrs（release 分支 geosite/oracle.mrs）
 # 说明：官方 meta-rules-dat 未发布 oracle 类目（v2fly 源表有 oracle 条目，但没编译出 .mrs）。
 #       这里只补 Oracle Cloud 控制台与登录链路要用的两个根域；
 #       v2fly 源表其余条目（java、sun.com、virtualbox.org 等）与云控制台分流无关，不收。
