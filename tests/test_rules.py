@@ -112,7 +112,7 @@ class Exclude(unittest.TestCase):
 class Repo(unittest.TestCase):
     def test_sources_and_own(self):
         cfg = load_sources()
-        self.assertEqual(len(cfg["sets"]), 14)
+        self.assertEqual(len(cfg["sets"]), 15)
         for s in cfg["sets"]:
             f = own_file(s)
             if f.exists():
