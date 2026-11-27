@@ -75,6 +75,7 @@ sets:
   - { name: samsung,      kind: geosite, provider: Samsung_mrs,      upstream: [{ repo: metacubex, path: "geo/geosite/samsung.yaml", format: payload }] }
   - { name: galaxy-store, kind: geosite, provider: Galaxy_Store_mrs, upstream: [] }
   - { name: oracle,       kind: geosite, provider: Oracle_mrs,       upstream: [] }
+  - { name: stun,         kind: geosite, provider: STUN_mrs,         upstream: [{ repo: metacubex, path: "geo/geosite/category-stun.yaml", format: payload }] }
   - name: nintendo
     kind: geosite
     provider: Nintendo_mrs
