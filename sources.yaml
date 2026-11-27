@@ -74,6 +74,7 @@ sets:
   - { name: google,       kind: geoip,   provider: IP_Google_mrs,    upstream: [{ repo: metacubex, path: "geo/geoip/google.yaml", format: payload }] }
   - { name: samsung,      kind: geosite, provider: Samsung_mrs,      upstream: [{ repo: metacubex, path: "geo/geosite/samsung.yaml", format: payload }] }
   - { name: galaxy-store, kind: geosite, provider: Galaxy_Store_mrs, upstream: [] }
+  - { name: oracle,       kind: geosite, provider: Oracle_mrs,       upstream: [] }
   - name: nintendo
     kind: geosite
     provider: Nintendo_mrs
