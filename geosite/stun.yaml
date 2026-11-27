@@ -1,0 +1,13 @@
+# 🛰️ STUN 自建补充规则（上游 category-stun 的缺口）
+# 仓库：styrigx/mihomo-rules/geosite/stun.yaml
+# 引用：rule-provider 名 STUN_mrs / behavior domain / format mrs（release 分支 geosite/stun.mrs）
+# 说明：主体走上游 MetaCubeX category-stun（源自 v2fly category-stun，359 条，构建时合并）；
+#       这里只补上游缺的主流 STUN 主机名（精确匹配）：
+#       Google 的 stun1–4（上游只有 stun.l.google.com）、Cloudflare、Twilio 的 STUN 入口。
+payload:
+  - "stun1.l.google.com"      # Google STUN（浏览器/WebRTC 常用，与 stun.l.google.com 一组）
+  - "stun2.l.google.com"
+  - "stun3.l.google.com"
+  - "stun4.l.google.com"
+  - "stun.cloudflare.com"     # Cloudflare STUN
+  - "global.stun.twilio.com"  # Twilio STUN（大量应用的 WebRTC 栈默认项）
