@@ -1,0 +1,9 @@
+# geosite/oracle  (behavior: domain)
+# 由 styrigx/mihomo-rules 机器人生成，勿手改；改规则请到 main 分支 geosite/ 或 geoip/。
+# 公开来源: 无
+# 自有规则: geosite/oracle.yaml
+# 条目: 2（公开 0 + 自有 2，重叠 0，被父域/大网段覆盖去掉 0）
+# 公开来源里跳过（编不进 MRS）: 无
+payload:
+  - '+.oracle.com'
+  - '+.oraclecloud.com'
